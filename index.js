@@ -8,15 +8,15 @@ console.log(fifaData)
 	💡 İPUCU: Öncelikle datayı filtrelemek isteyebilirsiniz */
 
 //(a) 2014 Dünya kupası Finali Evsahibi takım ismi (dizide "Home Team Name" anahtarı)
-fifaData.filter(item=> item.Year===2014).filter(item=> item.Stage === "Final")[0]["Home Team Name"]
+fifaData.filter(item=> item.Year===2014 && item.Stage === "Final")[0]["Home Team Name"]
 //(b) 2014 Dünya kupası Finali Deplasman takım ismi  (dizide "Away Team Name" anahtarı)
-fifaData.filter(item=> item.Year===2014).filter(item=> item.Stage === "Final")[0]["Away Team Name"]
+fifaData.filter(item=> item.Year===2014 && item.Stage === "Final")[0]["Away Team Name"]
 //(c) 2014 Dünya kupası finali Ev sahibi takım golleri (dizide "Home Team Goals" anahtarı)
-fifaData.filter(item=> item.Year===2014).filter(item=> item.Stage === "Final")[0]["Home Team Goals"]
+fifaData.filter(item=> item.Year===2014 && item.Stage === "Final")[0]["Home Team Goals"]
 //(d)2014 Dünya kupası finali Deplasman takım golleri  (dizide "Away Team Goals" anahtarı)
-fifaData.filter(item=> item.Year===2014).filter(item=> item.Stage === "Final")[0]["Away Team Goals"]
+fifaData.filter(item=> item.Year===2014 && item.Stage === "Final")[0]["Away Team Goals"]
 //(e) 2014 Dünya kupası finali kazananı*/
-fifaData.filter(item=> item.Year===2014).filter(item=> item.Stage === "Final")[0]["Win conditions"]
+fifaData.filter(item=> item.Year===2014 && item.Stage === "Final")[0]["Win conditions"].split(" ")[0] //.split ile sadece kazanan takım yazdırılbilir
 
 /*  Görev 2: 
 	Finaller adlı fonksiyonu kullanarak aşağıdakileri uygulayın:
@@ -86,11 +86,15 @@ function YillaraGoreKazananlar(fifaData,Finaller,Yillar,Kazananlar) {
 	let ülke=Kazananlar(fifaData,Finaller);
 	let sonuc=[];
 
-	for(let i=0 ; i<ülke.length ; i++){
-		sonuc.push(`${yıl[i]} yılında, ${ülke[i]} dünya kupasını kazandı!`)
-	}
-	return sonuc;
+	yıl.forEach((item,i)=> {
+		sonuc.push(`${item} yılında, ${ülke[i]} dünya kupasını kazandı!`)
+	})
 
+	// for(let i=0 ; i<ülke.length ; i++){
+	// 	sonuc.push(`${yıl[i]} yılında, ${ülke[i]} dünya kupasını kazandı!`)
+	// }
+	
+	return sonuc;
 }
 
 
@@ -108,14 +112,16 @@ function YillaraGoreKazananlar(fifaData,Finaller,Yillar,Kazananlar) {
 	
 */
 
-function OrtalamaGolSayisi(Finaller,fifaData) {
+function OrtalamaGolSayisi(Finaller) {
 	
-	let homeTeamGoal=Finaller(fifaData).map(items=> items["Home Team Goals"])
-	let evSahibiToplamGol=homeTeamGoal.reduce((a,b) => a+b ,0)
-	let evSahibiOrtalamaGol=evSahibiToplamGol/(homeTeamGoal.length)
-	let awayTeamGoal=Finaller(fifaData).map(items=> items["Away Team Goals"])
-	let konukTakımToplamGol=awayTeamGoal.reduce((a,b) => a+b ,0)
-	let sonuc=[evSahibiOrtalamaGol.toFixed(2),konukTakımToplamGol]
+	// let homeTeamGoal=Finaller.map(items=> items["Home Team Goals"])
+	// let evSahibiToplamGol=homeTeamGoal.reduce((a,b) => a+b ,0)
+	// let awayTeamGoal=Finaller.map(items=> items["Away Team Goals"])
+	// let konukTakımToplamGol=awayTeamGoal.reduce((a,b) => a+b ,0)
+	// let sonuc=((konukTakımToplamGol+evSahibiToplamGol)/(homeTeamGoal.length)).toFixed(2);
+	
+	let finalToplamGol=Finaller.reduce((total,item)=> (total+item["Home Team Goals"] +item["Away Team Goals"]),0 )
+	let sonuc=(finalToplamGol/(Finaller.length)).toFixed(2)
 
 	return sonuc;
 }
